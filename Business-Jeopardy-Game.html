@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Jeopardy — A*S*K Fundamental Business Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #060818;
+    --navy: #0a0f28;
+    --navy-cell: #1e2a5e;
+    --navy-cell-hover: #2c3d82;
+    --gold: #f4c442;
+    --gold-deep: #d4a017;
+    --gold-soft: #fde9a8;
+    --used: #2a2d44;
+    --used-text: #4a5078;
+    --white: #ffffff;
+    --green: #4ade80;
+    --red: #f87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--navy-deep);
+    font-family: 'Outfit', system-ui, sans-serif;
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, #1a1f4a 0%, var(--navy-deep) 60%),
+      var(--navy-deep);
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  .display-font {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  /* ==================== HEADER ==================== */
+  .header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .header .eyebrow {
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--white);
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(244, 196, 66, 0.3);
+  }
+
+  .header h1 .accent {
+    color: var(--gold);
+  }
+
+  .header .subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* ==================== SETUP SCREEN ==================== */
+  .setup {
+    max-width: 600px;
+    margin: 4rem auto;
+    background: rgba(30, 42, 94, 0.4);
+    border: 1px solid rgba(244, 196, 66, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .setup h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .setup p {
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .team-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .team-input-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .team-input-row label {
+    font-weight: 600;
+    color: var(--gold);
+    width: 80px;
+    font-size: 0.95rem;
+  }
+
+  .team-input-row input {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(244, 196, 66, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .team-input-row input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .team-input-row .remove-btn {
+    background: transparent;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: var(--red);
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .team-input-row .remove-btn:hover {
+    background: rgba(248, 113, 113, 0.1);
+  }
+
+  .add-team-btn {
+    background: transparent;
+    border: 1px dashed rgba(244, 196, 66, 0.4);
+    color: var(--gold);
+    border-radius: 8px;
+    padding: 0.75rem;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .add-team-btn:hover {
+    background: rgba(244, 196, 66, 0.05);
+    border-color: var(--gold);
+  }
+
+  .start-btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--navy-deep);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(244, 196, 66, 0.3);
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(244, 196, 66, 0.5);
+  }
+
+  .start-btn:active {
+    transform: translateY(0);
+  }
+
+  /* ==================== SCOREBOARD ==================== */
+  .scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .team-score {
+    background: rgba(30, 42, 94, 0.6);
+    border: 1px solid rgba(244, 196, 66, 0.25);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    min-width: 140px;
+    text-align: center;
+    transition: all 0.25s;
+  }
+
+  .team-score.leading {
+    border-color: var(--gold);
+    background: rgba(244, 196, 66, 0.1);
+    box-shadow: 0 0 20px rgba(244, 196, 66, 0.2);
+  }
+
+  .team-score .team-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+
+  .team-score.leading .team-name {
+    color: var(--gold);
+  }
+
+  .team-score .score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .team-score .score.negative {
+    color: var(--red);
+  }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* ==================== BOARD ==================== */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--navy-deep);
+  }
+
+  .category-header {
+    background: linear-gradient(180deg, var(--navy-cell) 0%, #15205a 100%);
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.95rem, 1.4vw, 1.4rem);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  }
+
+  .cell {
+    background: linear-gradient(180deg, var(--navy-cell) 0%, #15205a 100%);
+    border: 2px solid rgba(244, 196, 66, 0.15);
+    border-radius: 4px;
+    padding: 1.5rem 0.5rem;
+    text-align: center;
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.6rem);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    min-height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    user-select: none;
+  }
+
+  .cell:hover:not(.used) {
+    background: linear-gradient(180deg, var(--navy-cell-hover) 0%, #1e2a6a 100%);
+    border-color: var(--gold);
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(244, 196, 66, 0.2);
+  }
+
+  .cell.used {
+    background: var(--used);
+    border-color: rgba(255,255,255,0.05);
+    color: transparent;
+    cursor: default;
+  }
+
+  /* ==================== QUESTION MODAL ==================== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1.5rem;
+    animation: fadeIn 0.2s;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: linear-gradient(135deg, var(--navy-cell) 0%, #15205a 100%);
+    border: 3px solid var(--gold);
+    border-radius: 16px;
+    padding: 3rem 3rem 2rem;
+    max-width: 1000px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(244, 196, 66, 0.3);
+    animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes scaleIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal .point-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .modal .category-tag {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+
+  .modal .question-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1.4;
+    color: var(--white);
+    font-weight: 500;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+  }
+
+  .modal .answer-section {
+    background: rgba(0,0,0,0.3);
+    border: 2px dashed var(--gold);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .modal .answer-label {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal .answer-text {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    color: var(--gold-soft);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .modal .pi-tag {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .modal .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .modal .reveal-btn {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--navy-deep);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(244, 196, 66, 0.3);
+  }
+
+  .modal .reveal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(244, 196, 66, 0.5);
+  }
+
+  .modal .scoring-section {
+    margin-top: 1.5rem;
+  }
+
+  .modal .scoring-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .modal .team-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Per-team scoring rows (everyone-answers mode) */
+  .team-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .team-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(30, 42, 94, 0.5);
+    border: 1px solid rgba(244, 196, 66, 0.15);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+  }
+
+  .team-row .team-label {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+    color: var(--white);
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .team-row .row-buttons {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .team-row .row-buttons button {
+    border: 1.5px solid;
+    background: transparent;
+    border-radius: 6px;
+    padding: 0.45rem 0.85rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .team-row .right-btn {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .team-row .right-btn:hover:not(.selected) {
+    background: rgba(74, 222, 128, 0.1);
+  }
+
+  .team-row .right-btn.selected {
+    background: var(--green);
+    color: var(--navy-deep);
+    box-shadow: 0 2px 12px rgba(74, 222, 128, 0.4);
+  }
+
+  .team-row .wrong-btn {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .team-row .wrong-btn:hover:not(.selected) {
+    background: rgba(248, 113, 113, 0.1);
+  }
+
+  .team-row .wrong-btn.selected {
+    background: var(--red);
+    color: var(--navy-deep);
+    box-shadow: 0 2px 12px rgba(248, 113, 113, 0.4);
+  }
+
+  .modal .team-btn {
+    background: rgba(74, 222, 128, 0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    border-radius: 8px;
+    padding: 0.65rem 0.5rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+
+  .modal .team-btn.wrong {
+    background: rgba(248, 113, 113, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .modal .team-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .modal .team-btn.correct:hover {
+    background: rgba(74, 222, 128, 0.3);
+  }
+
+  .modal .team-btn.wrong:hover {
+    background: rgba(248, 113, 113, 0.3);
+  }
+
+  /* ==================== FINAL JEOPARDY ==================== */
+  .final-jeopardy-banner {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(244, 196, 66, 0.15) 0%, rgba(212, 160, 23, 0.1) 100%);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(244, 196, 66, 0.2); }
+    50% { box-shadow: 0 0 60px rgba(244, 196, 66, 0.5); }
+  }
+
+  .final-jeopardy-banner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .final-jeopardy-banner p {
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.5rem;
+  }
+
+  .final-jeopardy-banner .start-final-btn {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--navy-deep);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(244, 196, 66, 0.3);
+  }
+
+  .final-jeopardy-banner .start-final-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(244, 196, 66, 0.5);
+  }
+
+  /* ==================== WAGER SCREEN ==================== */
+  .wager-screen {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .wager-screen .category-reveal {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .wager-screen .category-reveal .label {
+    color: var(--gold);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .wager-screen .category-reveal .category {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+
+  .wager-input-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(30, 42, 94, 0.4);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(244, 196, 66, 0.2);
+  }
+
+  .wager-input-row .name {
+    flex: 1;
+    font-weight: 600;
+  }
+
+  .wager-input-row .current-score {
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .wager-input-row input {
+    width: 130px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(244, 196, 66, 0.3);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    text-align: right;
+  }
+
+  .wager-input-row input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  /* ==================== END SCREEN ==================== */
+  .end-screen {
+    max-width: 700px;
+    margin: 4rem auto;
+    text-align: center;
+  }
+
+  .end-screen .winner-banner {
+    background: linear-gradient(135deg, rgba(244, 196, 66, 0.2) 0%, rgba(212, 160, 23, 0.1) 100%);
+    border: 3px solid var(--gold);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .end-screen .crown {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .end-screen h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .end-screen .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .end-screen .winner-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+
+  .end-screen .final-standings {
+    background: rgba(30, 42, 94, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .end-screen .standing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 1.1rem;
+  }
+
+  .end-screen .standing-row:last-child { border-bottom: none; }
+  .end-screen .standing-row .rank { color: var(--gold); font-weight: 700; min-width: 30px; }
+  .end-screen .standing-row .team { flex: 1; text-align: left; padding-left: 1rem; }
+  .end-screen .standing-row .pts { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gold); }
+
+  /* ==================== DAILY DOUBLE ==================== */
+  .dd-banner {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, rgba(244, 196, 66, 0.2) 0%, rgba(212, 160, 23, 0.1) 100%);
+    border-radius: 12px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 60px rgba(244, 196, 66, 0.4) inset;
+    animation: ddPulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes ddPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(244, 196, 66, 0.3) inset, 0 0 30px rgba(244, 196, 66, 0.2); }
+    50% { box-shadow: 0 0 80px rgba(244, 196, 66, 0.6) inset, 0 0 80px rgba(244, 196, 66, 0.5); }
+  }
+
+  .dd-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(244, 196, 66, 0.6), 0 4px 0 rgba(0,0,0,0.4);
+    animation: ddBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes ddBounce {
+    0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .dd-sparkle {
+    color: var(--gold);
+    font-size: 2rem;
+    margin-top: 0.5rem;
+    letter-spacing: 1.5rem;
+    animation: ddSparkle 2s ease-in-out infinite;
+  }
+
+  @keyframes ddSparkle {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  .dd-stage-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--white);
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .dd-team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .dd-team-list button {
+    background: rgba(30, 42, 94, 0.6);
+    border: 2px solid rgba(244, 196, 66, 0.3);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+
+  .dd-team-list button:hover {
+    border-color: var(--gold);
+    background: rgba(244, 196, 66, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .dd-team-list .score-pill {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 1.4rem;
+  }
+
+  .dd-wager-display {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .dd-wager-display .team-name-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+  }
+
+  .dd-wager-display .score-line {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  .dd-wager-input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dd-wager-input-wrapper .dollar {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+  }
+
+  .dd-wager-input-wrapper input {
+    width: 220px;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .dd-wager-input-wrapper input:focus {
+    outline: none;
+    box-shadow: 0 0 20px rgba(244, 196, 66, 0.4);
+  }
+
+  .dd-wager-limits {
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dd-wager-limits .limit-val {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .dd-result-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .dd-result-buttons button {
+    padding: 1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid;
+    transition: all 0.15s;
+  }
+
+  .dd-result-buttons .correct-btn {
+    background: rgba(74, 222, 128, 0.15);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .dd-result-buttons .correct-btn:hover {
+    background: rgba(74, 222, 128, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .dd-result-buttons .wrong-btn {
+    background: rgba(248, 113, 113, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .dd-result-buttons .wrong-btn:hover {
+    background: rgba(248, 113, 113, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* ==================== UTILITIES ==================== */
+  .hidden { display: none !important; }
+
+  @media (max-width: 768px) {
+    .board { grid-template-columns: repeat(6, 1fr); gap: 3px; }
+    .category-header { font-size: 0.7rem; min-height: 70px; padding: 0.5rem 0.25rem; }
+    .cell { font-size: 1rem; padding: 1rem 0.25rem; min-height: 70px; }
+    .modal { padding: 1.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="eyebrow">Lafayette High School • Business & Marketing</div>
+    <h1>Business <span class="accent">Jeopardy</span></h1>
+    <div class="subtitle">A*S*K Fundamental Business Concepts • Practice Game</div>
+  </div>
+
+  <!-- ==================== SETUP SCREEN ==================== -->
+  <div id="setup-screen" class="setup">
+    <h2>Team Setup</h2>
+    <p>Enter the names of competing teams (2 to 6 teams). On each question, every team writes their answer on paper. After you reveal the answer, mark each team correct (+points) or wrong (−points), or leave them unmarked.</p>
+    <div class="team-input-group" id="team-inputs">
+      <div class="team-input-row">
+        <label>Team 1</label>
+        <input type="text" placeholder="Team name..." value="Team 1">
+      </div>
+      <div class="team-input-row">
+        <label>Team 2</label>
+        <input type="text" placeholder="Team name..." value="Team 2">
+      </div>
+    </div>
+    <button class="add-team-btn" id="add-team">+ Add another team</button>
+    <button class="start-btn" id="start-game">Start Game</button>
+  </div>
+
+  <!-- ==================== GAME SCREEN ==================== -->
+  <div id="game-screen" class="hidden">
+    <div class="scoreboard" id="scoreboard"></div>
+    <div style="text-align:center; margin-bottom: 1rem;">
+      <button class="reset-btn" id="reset-game">↺ Reset Game</button>
+    </div>
+    <div class="board" id="board"></div>
+    <div id="final-jeopardy-banner" class="final-jeopardy-banner hidden">
+      <h2>Final Jeopardy</h2>
+      <p>All clues are revealed. Time for the final question — teams place their wagers.</p>
+      <button class="start-final-btn" id="start-final">Begin Final Jeopardy</button>
+    </div>
+  </div>
+
+  <!-- ==================== QUESTION MODAL ==================== -->
+  <div class="modal-overlay" id="question-modal">
+    <div class="modal">
+      <div class="point-value" id="modal-points"></div>
+      <div class="category-tag" id="modal-category"></div>
+      <div class="question-text" id="modal-question"></div>
+
+      <div id="answer-section" class="answer-section hidden">
+        <div class="answer-label">Correct Answer</div>
+        <div class="answer-text" id="modal-answer"></div>
+        <div class="pi-tag" id="modal-pi"></div>
+      </div>
+
+      <div class="controls">
+        <button class="reveal-btn" id="reveal-btn">Reveal Answer</button>
+        <div id="scoring-section" class="scoring-section hidden">
+          <div class="scoring-label">Mark each team's answer (leave unmarked if a team didn't answer):</div>
+          <div class="team-rows" id="team-rows"></div>
+          <button class="reveal-btn" id="apply-scores-btn" style="margin-top:1rem;">Apply Scores • Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DAILY DOUBLE MODAL ==================== -->
+  <div class="modal-overlay" id="daily-double-modal">
+    <div class="modal">
+      <!-- Stage 1: Reveal -->
+      <div id="dd-stage-reveal">
+        <div class="dd-banner">
+          <div class="dd-title">DAILY DOUBLE</div>
+          <div class="dd-sparkle">✦ ✦ ✦</div>
+        </div>
+        <div class="category-tag" id="dd-category-tag" style="margin-bottom:1.5rem;"></div>
+        <button class="reveal-btn" id="dd-continue">Continue</button>
+      </div>
+
+      <!-- Stage 2: Team selector -->
+      <div id="dd-stage-team" class="hidden">
+        <div class="dd-stage-heading">Which team chose this clue?</div>
+        <div class="dd-team-list" id="dd-team-list"></div>
+      </div>
+
+      <!-- Stage 3: Wager -->
+      <div id="dd-stage-wager" class="hidden">
+        <div class="dd-stage-heading">Place Your Wager</div>
+        <div class="dd-wager-display">
+          <div class="team-name-big" id="dd-selected-team"></div>
+          <div class="score-line">Current score: $<span id="dd-selected-score"></span></div>
+        </div>
+        <div class="dd-wager-input-wrapper">
+          <span class="dollar">$</span>
+          <input type="number" id="dd-wager-input" min="0" step="1">
+        </div>
+        <div class="dd-wager-limits">
+          Min: <span class="limit-val">$<span id="dd-min">0</span></span>
+          &nbsp;•&nbsp;
+          Max: <span class="limit-val">$<span id="dd-max">1000</span></span>
+        </div>
+        <button class="reveal-btn" id="dd-lock-wager">Lock Wager • Show Question</button>
+      </div>
+
+      <!-- Stage 4: Question + Reveal + Result -->
+      <div id="dd-stage-question" class="hidden">
+        <div class="point-value">$<span id="dd-wager-display"></span></div>
+        <div class="category-tag" id="dd-q-category"></div>
+        <div class="question-text" id="dd-question"></div>
+
+        <div id="dd-answer-section" class="answer-section hidden">
+          <div class="answer-label">Correct Answer</div>
+          <div class="answer-text" id="dd-answer"></div>
+          <div class="pi-tag" id="dd-pi"></div>
+        </div>
+
+        <div class="controls">
+          <button class="reveal-btn" id="dd-reveal-btn">Reveal Answer</button>
+          <div id="dd-result-section" class="hidden">
+            <div class="scoring-label" id="dd-result-prompt">Result for this team:</div>
+            <div class="dd-result-buttons">
+              <button class="correct-btn" id="dd-correct">✓ Correct (+$<span id="dd-correct-amt"></span>)</button>
+              <button class="wrong-btn" id="dd-wrong">✗ Wrong (−$<span id="dd-wrong-amt"></span>)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FINAL JEOPARDY MODAL ==================== -->
+  <div class="modal-overlay" id="final-modal">
+    <div class="modal">
+      <div id="final-stage-1">
+        <div class="point-value" style="color:var(--gold);">FINAL JEOPARDY</div>
+        <div class="category-reveal" style="text-align:center; margin: 1rem 0 2rem;">
+          <div class="category-tag">Category</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--white); letter-spacing:0.04em;" id="final-category-name"></div>
+        </div>
+        <div class="question-text" style="font-size:1.1rem; color:rgba(255,255,255,0.7); margin-bottom:1.5rem;">Each team enters their wager (must be ≥ $0 and ≤ their current score, minimum $0 if score is negative).</div>
+        <div id="final-wagers"></div>
+        <button class="reveal-btn" id="lock-wagers" style="margin-top:1rem;">Lock Wagers • Reveal Question</button>
+      </div>
+
+      <div id="final-stage-2" class="hidden">
+        <div class="point-value">FINAL JEOPARDY</div>
+        <div class="category-tag" id="final-cat-tag"></div>
+        <div class="question-text" id="final-question"></div>
+
+        <div id="final-answer-section" class="answer-section hidden">
+          <div class="answer-label">Correct Answer</div>
+          <div class="answer-text" id="final-answer"></div>
+          <div class="pi-tag" id="final-pi"></div>
+        </div>
+
+        <div class="controls">
+          <button class="reveal-btn" id="final-reveal-btn">Reveal Answer</button>
+          <div id="final-scoring" class="scoring-section hidden">
+            <div class="scoring-label">Mark each team's response:</div>
+            <div id="final-team-results"></div>
+            <button class="reveal-btn" id="finalize-btn" style="margin-top:1rem;">See Final Results</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== END SCREEN ==================== -->
+  <div id="end-screen" class="end-screen hidden">
+    <div class="winner-banner">
+      <div class="crown">🏆</div>
+      <h2>Winner</h2>
+      <div class="winner-name" id="winner-name"></div>
+      <div class="winner-score" id="winner-score"></div>
+    </div>
+    <div class="final-standings">
+      <div style="color:var(--gold); font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.08em; margin-bottom:0.5rem;">FINAL STANDINGS</div>
+      <div id="standings-list"></div>
+    </div>
+    <button class="start-btn" id="play-again">Play Again</button>
+  </div>
+
+<script>
+  // ==================== GAME DATA ====================
+  // Each cell has a "pool" of 4 question variants. On each game start, ONE
+  // variant is randomly drawn per cell — so the layout is identical but the
+  // actual content shuffles every play. Across 4 sessions, students experience
+  // substantially different games even with the same board.
+  const CATEGORIES = [
+    {
+      name: "EQ at Work",
+      subtitle: "Emotional Intelligence",
+      pools: [
+        { points: 200, items: [
+          { q: "Telling the truth even when it costs you the sale, and admitting your own mistakes — both demonstrate this character trait.", a: "Honesty", pi: "EI:022" },
+          { q: "Doing what is right when no one is watching is the definition of this trait.", a: "Integrity", pi: "EI:022" },
+          { q: "Treating every customer with respect and without prejudice demonstrates this character trait.", a: "Consideration", pi: "EI:021" },
+          { q: "Understanding and sharing what another person feels — putting yourself in their shoes — defines this trait.", a: "Empathy", pi: "EI:030" },
+          { q: "Owning your mistakes, completing assigned tasks, and meeting deadlines all demonstrate this workplace behavior.", a: "Responsible behavior", pi: "EI:021" },
+          { q: "Taking action before being told to is the workplace trait of this.", a: "Initiative", pi: "EI:024" },
+          { q: "Standing up for yourself respectfully — not passive, not aggressive — is called this.", a: "Assertiveness", pi: "EI:023" }
+        ]},
+        { points: 400, items: [
+          { q: "When DeShawn's teacher praises his group project, he gives credit to teammates who helped. DeShawn is showing this.", a: "Trust (or trustworthiness)", pi: "EI:128" },
+          { q: "The Spanish Club president signs members up to tutor children at the local library. The president is exhibiting this trait.", a: "Altruism", pi: "EI:030" },
+          { q: "A leader who is willing to learn, change, and take occasional risks is showing this trait.", a: "Flexibility", pi: "EI:001" },
+          { q: "The president of a company has earned a reputation for honesty and competence over many years. This reputation is called this.", a: "Credibility", pi: "EI:001" },
+          { q: "Open-minded people are willing to do this with the status quo.", a: "Challenge it (challenge the status quo)", pi: "EI:031" },
+          { q: "A clear picture of where the team or organization is headed is the leadership trait of this.", a: "Vision", pi: "EI:001" },
+          { q: "Promoting an employee based on documented performance instead of personal favoritism demonstrates this principle.", a: "Fairness", pi: "EI:127" }
+        ]},
+        { points: 600, items: [
+          { q: "The primary benefit of work group interdependence is the achievement of these.", a: "Common goals and mutual benefits", pi: "EI:045" },
+          { q: "When working in groups, connecting your idea to what someone else just said is the technique called this.", a: "Building on someone else's comment", pi: "EI:037" },
+          { q: "In an ambiguous decision, this technique helps reduce the unknowns associated with all your options.", a: "Shifting to other perspectives", pi: "EI:030" },
+          { q: "An employee is asked to falsify a sales report to hit a quarterly target. This situation — competing values, no clearly right answer — is called this.", a: "An ethical dilemma", pi: "EI:124" },
+          { q: "Honesty, fairness, integrity, and respect are examples of these — the principles that guide ethical behavior at work.", a: "Ethical principles", pi: "EI:123" },
+          { q: "Recognizing that a coworker is asking you to help cover up an error is the first step in this process.", a: "Recognizing an ethical issue", pi: "EI:125" },
+          { q: "Showing up to work consistently, completing tasks without reminders, and admitting mistakes all demonstrate this.", a: "Responsible behavior", pi: "EI:021" }
+        ]},
+        { points: 800, items: [
+          { q: "During a conflict, this type of statement makes the other person feel defensive and angry. (Single word.)", a: "'You' statements", pi: "EI:038" },
+          { q: "To avoid putting someone on the defensive during a disagreement, communication coaches recommend using this kind of statement instead. (Single word.)", a: "'I' statements", pi: "EI:038" },
+          { q: "Maintaining eye contact, paraphrasing what was said, and asking clarifying questions are all part of this communication skill.", a: "Active listening", pi: "EI:129" },
+          { q: "Effective workplace feedback is specific, timely, and focuses on this — not on the person.", a: "The behavior (the action, not the personality)", pi: "EI:129" },
+          { q: "Saying 'I noticed the report is missing data' rather than 'You forgot to add data' keeps feedback focused on this.", a: "The behavior or situation (not the person)", pi: "EI:129" },
+          { q: "Win-win solutions, listening without interrupting, and focusing on the problem (not the person) are all part of this process.", a: "Conflict resolution", pi: "EI:038" },
+          { q: "Having a difficult conversation in person rather than via email or text best supports this.", a: "Open, honest communication", pi: "EI:129" }
+        ]},
+        { points: 1000, items: [
+          { q: "An example of a desirable, attainable goal an individual could realistically pursue is to do this.", a: "Increase perseverance", pi: "EI:125" },
+          { q: "A goal like 'change my friend's behavior' or 'eliminate all anger' is poorly written because it fails this rule.", a: "It must be within your control", pi: "EI:125" },
+          { q: "A manager makes a decision that boosts short-term profits but damages employee morale. This concept describes considering how your actions ripple out over time.", a: "Long-term value (impact of actions on others)", pi: "EI:137" },
+          { q: "Influencing a group of people toward a shared goal is the core of this concept.", a: "Leadership", pi: "EI:009" },
+          { q: "A team lead who admits when they're wrong, listens to feedback, and credits team members for wins is demonstrating qualities of this.", a: "Effective leadership", pi: "EI:009" },
+          { q: "Considering how a decision will affect employees, customers, suppliers, and the community is the practice of considering this.", a: "Stakeholder impact (long-term value)", pi: "EI:137" },
+          { q: "Effective personal goals share three traits: they are positive, attainable, and this.", a: "Within your control", pi: "EI:125" }
+        ]}
+      ]
+    },
+    {
+      name: "Money Talk",
+      subtitle: "Economics",
+      pools: [
+        { points: 200, items: [
+          { q: "Promotion, layaway, and credit help create this type of economic utility.", a: "Possession utility", pi: "EC:004" },
+          { q: "A bakery turning flour, sugar, and eggs into wedding cakes creates this type of economic utility.", a: "Form utility", pi: "EC:004" },
+          { q: "A 24-hour convenience store and a Sunday-open grocery store both create this type of economic utility.", a: "Time utility", pi: "EC:004" },
+          { q: "A vending machine in a remote office building primarily provides this type of economic utility.", a: "Place utility", pi: "EC:004" },
+          { q: "Form, place, time, and possession are the four kinds of these.", a: "Economic utilities", pi: "EC:004" },
+          { q: "An online store that lets a customer instantly download a movie at midnight on release day primarily creates this utility.", a: "Time utility", pi: "EC:004" },
+          { q: "The ability of a product to satisfy a customer's need or want is called this.", a: "Utility", pi: "EC:004" }
+        ]},
+        { points: 400, items: [
+          { q: "One characteristic of trade-industry businesses is that they sell what?", a: "Products to others (resell to wholesalers/retailers)", pi: "EC:071" },
+          { q: "Wholesalers and retailers belong to this category of business activity.", a: "Trade industries", pi: "EC:071" },
+          { q: "Farms, factories, and mining companies — businesses that create raw materials or finished goods — fall into this business category.", a: "Industrial / Producer businesses", pi: "EC:071" },
+          { q: "Salons, banks, and consulting firms that provide intangible offerings belong to this business category.", a: "Service industries", pi: "EC:071" },
+          { q: "Producing goods, providing employment, paying taxes, and contributing to the community all describe this.", a: "The role of business in society", pi: "EC:070" },
+          { q: "Industrial, trade, and service businesses are three of these.", a: "Types of business activities", pi: "EC:071" },
+          { q: "Government regulates businesses through laws, taxes, and oversight agencies. This describes this relationship.", a: "The relationship between government and business", pi: "EC:008" }
+        ]},
+        { points: 600, items: [
+          { q: "A person places $500 in the bank rather than buying something they want. The 'something they didn't get' is this.", a: "Opportunity cost", pi: "EC:005" },
+          { q: "What you give up when you choose one option over another is called this.", a: "Opportunity cost", pi: "EC:005" },
+          { q: "Two companies want the same office building, but only one can buy it. This illustrates this limit on economic freedom.", a: "Competition for limited resources", pi: "EC:009" },
+          { q: "The freedoms to own property, start a business, and choose your occupation are core to this economic system.", a: "Private enterprise", pi: "EC:009" },
+          { q: "Saving money instead of spending it on something you want today means giving up this kind of reward.", a: "Immediate gratification", pi: "EC:005" },
+          { q: "Owning property, starting businesses, and earning profits are economic freedoms granted under this system.", a: "Private enterprise (capitalism)", pi: "EC:009" },
+          { q: "Profit, the right to own property, and competition are foundational principles of this economic system.", a: "Private enterprise (capitalism)", pi: "EC:009" }
+        ]},
+        { points: 800, items: [
+          { q: "An advantage of offering credit is that credit customers tend to be less of this than cash customers.", a: "Price-conscious", pi: "EC:006" },
+          { q: "Credit customers spend more freely and worry less about price. This is this kind of advantage.", a: "An advantage of offering credit (to businesses)", pi: "EC:006" },
+          { q: "When supply increases while demand stays constant, this happens to the equilibrium price.", a: "It decreases (goes down)", pi: "EC:006" },
+          { q: "When demand increases sharply while supply stays the same, this happens to the equilibrium price.", a: "It increases (goes up)", pi: "EC:006" },
+          { q: "The price at which the quantity supplied exactly equals the quantity demanded is called this.", a: "Equilibrium price (market price)", pi: "EC:006" },
+          { q: "When prices rise sharply over time across an economy, the result is this.", a: "Inflation", pi: "EC:083" },
+          { q: "When the prices of nearly everything in the economy fall over time, this is called this.", a: "Deflation", pi: "EC:083" }
+        ]},
+        { points: 1000, items: [
+          { q: "Small businesses are the building blocks of these — that's why all of them strengthen the economy.", a: "Large corporations", pi: "EC:065" },
+          { q: "Why do all small businesses (not just successful ones) strengthen the economy? Because they are the building blocks of these.", a: "Large corporations", pi: "EC:065" },
+          { q: "A factory upgrades equipment and produces 50% more per day with the same workers. This is an increase in this measure.", a: "Productivity", pi: "EC:013" },
+          { q: "Doing more with the same resources — more output without adding workers — is called an increase in this.", a: "Productivity", pi: "EC:013" },
+          { q: "Two pizza shops on the same block, both fighting for the lunch crowd, illustrate this market force.", a: "Competition", pi: "EC:012" },
+          { q: "Profit equals total revenue minus this.", a: "Total costs (expenses)", pi: "EC:010" },
+          { q: "When multiple sellers fight for the same customers, this typically drives prices down and pushes companies to improve quality.", a: "Competition", pi: "EC:012" }
+        ]}
+      ]
+    },
+    {
+      name: "Career Ready",
+      subtitle: "Professional Development",
+      pools: [
+        { points: 200, items: [
+          { q: "Julian just got paid $100 and needs to decide what to do with it. The first step in his decision-making process is this.", a: "Determine his financial objectives (define goals)", pi: "PD:017" },
+          { q: "Step 1 of any decision-making process is to define this.", a: "Your objectives (goals)", pi: "PD:017" },
+          { q: "After defining objectives, the next step in decision-making is to identify these.", a: "Your options (alternatives)", pi: "PD:017" },
+          { q: "After Joseph identifies his options for a career, he should examine personality, abilities, and this third trait.", a: "Interests", pi: "PD:013" },
+          { q: "When choosing a career, examine three things about yourself: personality, abilities, and these.", a: "Interests", pi: "PD:013" },
+          { q: "After research between two colleges, Shonda has a 'gut feeling' one is right and chooses it. She is using this method.", a: "Intuition", pi: "PD:017" },
+          { q: "After making a decision, the final step in the decision-making process is to do this.", a: "Evaluate the result", pi: "PD:017" }
+        ]},
+        { points: 400, items: [
+          { q: "Generating many ideas without judging them is the decision-making method called this.", a: "Brainstorming", pi: "PD:017" },
+          { q: "A visual diagram that connects related ideas around a central topic is this decision-making technique.", a: "Mind mapping", pi: "PD:017" },
+          { q: "Examining your personality traits, abilities, and interests is part of this career-planning activity.", a: "Self-assessment", pi: "PD:013" },
+          { q: "Jamal is great with people but struggles with new sales-tracking software. To improve his performance, he should do this.", a: "Update his technology skills", pi: "PD:033" },
+          { q: "When a workplace problem is described in a question, the right answer matches the actual stated problem — not a related-sounding one. This concept is called this.", a: "Matching the solution to the problem (gap analysis)", pi: "PD:033" },
+          { q: "An effective personal goal must be positive, attainable, and this.", a: "Within your control", pi: "PD:018" },
+          { q: "'Eliminate all anger' or 'change my friend's behavior' are poorly written goals because they fail this rule.", a: "They must be within your control", pi: "PD:018" }
+        ]},
+        { points: 600, items: [
+          { q: "Of protocols, policies, and procedures, this one is the broadest in scope.", a: "Protocols", pi: "PD:020" },
+          { q: "Step-by-step instructions for performing a task are called this.", a: "Procedures", pi: "PD:020" },
+          { q: "Specific rules covering things like vacation, dress code, or social media use are called this.", a: "Policies", pi: "PD:020" },
+          { q: "Protocols set general standards of behavior. Compared to policies and procedures, protocols are this.", a: "Broader (more general)", pi: "PD:020" },
+          { q: "An employee handbook section titled 'How we treat clients' falls under this category of company guidelines.", a: "Protocols", pi: "PD:020" },
+          { q: "A manager creating a 5-step list for closing the store at night is creating this type of guideline.", a: "Procedures", pi: "PD:020" },
+          { q: "True or false: Employees do NOT need to know about their company's protocols. (Answer with the correct statement.)", a: "False — employees DO need to know company protocols", pi: "PD:020" }
+        ]},
+        { points: 800, items: [
+          { q: "In a public corporation, the CEO reports to this group.", a: "Board of directors", pi: "PD:028" },
+          { q: "Shareholders of a public corporation elect this group, which then hires the CEO.", a: "Board of directors", pi: "PD:028" },
+          { q: "The chain of command in a public corporation: shareholders → board of directors → CEO → this group.", a: "Executive team (CFO, COO, etc.)", pi: "PD:028" },
+          { q: "When current employees help new hires by showing them daily processes, they are assisting with this HR activity.", a: "Orientation", pi: "PD:028" },
+          { q: "Orientation focuses on 'what is this place and how does it work,' while this related activity focuses on 'developing the skills you need.'", a: "Training", pi: "PD:028" },
+          { q: "The CFO and COO of a public corporation report to this person.", a: "The CEO", pi: "PD:028" },
+          { q: "Existing employees often help new hires during orientation by helping them do this.", a: "Learn their jobs", pi: "PD:028" }
+        ]},
+        { points: 1000, items: [
+          { q: "Owning your own personal development, learning new skills, and tracking your own goals is the practice of this.", a: "Self-directed learning (career management)", pi: "PD:251" },
+          { q: "Reviewing your strengths, weaknesses, and progress toward career goals each year is part of this.", a: "Self-assessment", pi: "PD:013" },
+          { q: "Continuous learning, attending workshops, and earning new certifications all support this career outcome.", a: "Career advancement (professional growth)", pi: "PD:251" },
+          { q: "When you want a promotion, you should expand your skills, build relationships, and make these visible to leadership.", a: "Your accomplishments (results)", pi: "PD:251" },
+          { q: "Building professional relationships at conferences, events, and online communities is the practice of this.", a: "Networking", pi: "PD:037" },
+          { q: "Resumes, cover letters, and LinkedIn profiles all serve this purpose in a job search.", a: "Demonstrating qualifications (personal marketing)", pi: "PD:031" },
+          { q: "Speaking up about your contributions, not just doing them silently, is the practice of this.", a: "Self-advocacy (personal branding)", pi: "PD:251" }
+        ]}
+      ]
+    },
+    {
+      name: "Behind the Scenes",
+      subtitle: "Operations",
+      pools: [
+        { points: 200, items: [
+          { q: "Shia manages day-to-day production and distribution for a smartphone company. Shia's job title is most likely this.", a: "Operations manager", pi: "OP:189" },
+          { q: "Day-to-day production and distribution activities are the responsibility of this manager.", a: "The operations manager", pi: "OP:189" },
+          { q: "Are the outputs of production limited to tangible items only? Yes or no, and why?", a: "No — outputs can be tangible OR intangible (goods or services)", pi: "OP:001" },
+          { q: "Tangible outputs of production are called goods. Intangible outputs are called these.", a: "Services", pi: "OP:001" },
+          { q: "The flow of products, information, and money from raw materials to the final customer is called this.", a: "The supply chain", pi: "OP:189" },
+          { q: "Goods are tangible outputs; services are this kind of output.", a: "Intangible outputs", pi: "OP:001" },
+          { q: "A factory making phones produces tangible goods. A salon giving haircuts produces this kind of output.", a: "Intangible outputs (services)", pi: "OP:001" }
+        ]},
+        { points: 400, items: [
+          { q: "Of all the parties involved in workplace safety, this group's role is to follow safety instructions.", a: "Employees", pi: "OP:007" },
+          { q: "Planning safety training, developing guidelines, and creating operating procedures is the role of this group.", a: "Managers (management)", pi: "OP:007" },
+          { q: "OSHA (Occupational Safety and Health Administration) sets safety standards and enforces compliance. OSHA is part of this branch.", a: "Government (federal government)", pi: "OP:007" },
+          { q: "Following safety instructions, using protective equipment, and reporting hazards are responsibilities of this workplace group.", a: "Employees", pi: "OP:007" },
+          { q: "If a question asks what employees can do to prevent workplace accidents, the answer is to do this.", a: "Follow safety instructions", pi: "OP:007" },
+          { q: "Job training programs, safety guidelines, and operating procedures are typically developed by this workplace group.", a: "Managers (management)", pi: "OP:007" },
+          { q: "When questions ask about workplace safety, the most common trap is mixing up the roles of employees vs. these.", a: "Managers", pi: "OP:007" }
+        ]},
+        { points: 600, items: [
+          { q: "An advertising agency limits access to information and assigns each employee this to maintain data security.", a: "A unique password", pi: "OP:154" },
+          { q: "Limiting access by role, requiring unique passwords, backing up data, and using firewalls are all part of this.", a: "Data (computer) security", pi: "OP:154" },
+          { q: "Requiring customers to use a check-in/check-out system for taking clothes into fitting rooms primarily reduces this.", a: "Theft (loss / shoplifting)", pi: "OP:013" },
+          { q: "Surveillance cameras, security tags, and secret shoppers are all examples of this.", a: "Loss prevention (security measures)", pi: "OP:013" },
+          { q: "Backups, firewalls, and antivirus software are designed to protect this business asset.", a: "Data (information / computer systems)", pi: "OP:154" },
+          { q: "Strong passwords, two-factor authentication, and locked file cabinets all help maintain this.", a: "Security (data and physical)", pi: "OP:154" },
+          { q: "Limiting access to certain information by role is a key principle of this.", a: "Data security", pi: "OP:154" }
+        ]},
+        { points: 800, items: [
+          { q: "A successful project, by definition, is one that is this — meaning the change holds and the system keeps working.", a: "Sustainable", pi: "OP:159" },
+          { q: "A project's three phases are plan, monitor, and this.", a: "Evaluate", pi: "OP:159" },
+          { q: "When a project's outputs continue to deliver value over time without falling apart, the project is said to be this.", a: "Sustainable", pi: "OP:159" },
+          { q: "Defining scope, timeline, budget, and resources is part of this project phase.", a: "The planning phase", pi: "OP:159" },
+          { q: "Tracking progress and taking corrective action mid-project is part of this project phase.", a: "The monitoring phase", pi: "OP:159" },
+          { q: "Determining whether a project succeeded — measuring against the original objectives — is this project phase.", a: "The evaluation phase", pi: "OP:159" },
+          { q: "Having a plan, being popular, or fixing a one-time problem are NOT proof a project succeeded. Real success requires this trait.", a: "Sustainability", pi: "OP:159" }
+        ]},
+        { points: 1000, items: [
+          { q: "Why do businesses carry automobile insurance on employees who drive personal cars on company business?", a: "Because the business is liable if an accident occurs", pi: "OP:024" },
+          { q: "When an employee drives their personal car for work, the company can be held responsible for damages. This is called this.", a: "Liability (vicarious liability)", pi: "OP:024" },
+          { q: "Insurance, security, contingency planning, and inventory control are all forms of this business activity.", a: "Risk management", pi: "OP:024" },
+          { q: "Inventory shrinkage from theft, employee accidents, and product defects are all sources of this.", a: "Business risk", pi: "OP:024" },
+          { q: "When a delivery driver gets in an accident on the job, the company faces this kind of cost.", a: "Liability (legal liability)", pi: "OP:024" },
+          { q: "Buying insurance to protect against losses from fire, theft, or accidents is the risk management strategy of this.", a: "Risk transfer (transferring risk)", pi: "OP:024" },
+          { q: "A retailer locks merchandise in glass cabinets to prevent theft. This is the risk management strategy of this.", a: "Risk reduction (or risk avoidance)", pi: "OP:024" }
+        ]}
+      ]
+    },
+    {
+      name: "Customer First",
+      subtitle: "Customer Relations + Communication",
+      pools: [
+        { points: 200, items: [
+          { q: "A customer asks, 'If I buy this, how can I be sure it will do what you say?' This describes this kind of customer.", a: "A suspicious customer", pi: "CR:008" },
+          { q: "A customer who acts like they know more than the salesperson and wants to be in charge is this type.", a: "Domineering / superior customer", pi: "CR:008" },
+          { q: "A customer who takes a long time to decide and needs detailed information is this type.", a: "Slow / methodical customer", pi: "CR:008" },
+          { q: "A customer who already wants to buy and just needs you to confirm and complete the sale is this type.", a: "Eager customer", pi: "CR:008" },
+          { q: "Suspicious, domineering, slow/methodical, and eager are common types of these.", a: "Difficult (or different) customer types", pi: "CR:008" },
+          { q: "A customer who keeps asking for proof and seems to doubt every claim is most likely this type.", a: "A suspicious customer", pi: "CR:008" },
+          { q: "A customer who walks in saying 'I'll take that one' has the buying behavior of this type.", a: "An eager customer", pi: "CR:008" }
+        ]},
+        { points: 400, items: [
+          { q: "You said you'd check on a delayed order and call the customer back. The best way to show a customer-service mindset is to do this.", a: "Call back as soon as possible with an answer", pi: "CR:004" },
+          { q: "Following through on promises promptly is the foundation of this.", a: "A customer-service mindset", pi: "CR:004" },
+          { q: "Listening actively to a complaint, acknowledging feelings, and offering a solution all support this.", a: "Customer service", pi: "CR:003" },
+          { q: "Treating every customer with respect, regardless of mood or appearance, is one of the principles of this.", a: "A customer-service mindset", pi: "CR:004" },
+          { q: "Adapting your communication style to fit cultural and social differences is part of this.", a: "Effective customer relations", pi: "CR:019" },
+          { q: "When a customer raves about a restaurant on social media and tags two friends, this drives this organic, unpaid form of promotion.", a: "Word-of-mouth", pi: "CR:003" },
+          { q: "A returning customer who knows your name, your usual order, and trusts your recommendations is a result of this.", a: "Strong customer relationships", pi: "CR:003" }
+        ]},
+        { points: 600, items: [
+          { q: "The first step when handling a customer complaint is to do this.", a: "Listen without interrupting", pi: "CR:010" },
+          { q: "After listening to a complaint, the next step is to acknowledge feelings, apologize sincerely, and do this.", a: "Find a solution", pi: "CR:010" },
+          { q: "After resolving a customer complaint, doing this confirms satisfaction and builds loyalty.", a: "Following up", pi: "CR:010" },
+          { q: "Listen, acknowledge, apologize, find a solution, follow up. This sequence describes this process.", a: "Handling customer complaints", pi: "CR:010" },
+          { q: "Even a sincere apology does this — without admitting legal liability.", a: "Acknowledges the customer's feelings", pi: "CR:010" },
+          { q: "An angry customer is yelling about a delayed order. Before doing anything else, the employee should do this.", a: "Listen calmly without interrupting", pi: "CR:010" },
+          { q: "Companies that resolve complaints well often turn complaining customers into these.", a: "Loyal customers (advocates)", pi: "CR:010" }
+        ]},
+        { points: 800, items: [
+          { q: "The component of a business letter that contains the date is called this.", a: "The heading", pi: "CO:091" },
+          { q: "The component of a business letter that contains the recipient's name and address is called this.", a: "The inside address", pi: "CO:091" },
+          { q: "'Dear Mr. Smith' is the part of a business letter called this.", a: "The salutation", pi: "CO:091" },
+          { q: "The main message of a business letter is contained in this part.", a: "The body", pi: "CO:091" },
+          { q: "'Sincerely' or 'Best regards' followed by your name is this part of a business letter.", a: "The complimentary close", pi: "CO:091" },
+          { q: "Heading, inside address, salutation, body, complimentary close, signature — these are the parts of this.", a: "A business letter", pi: "CO:091" },
+          { q: "When writing a letter of inquiry, the purpose of your letter should be identified here.", a: "At the beginning of the letter", pi: "CO:091" }
+        ]},
+        { points: 1000, items: [
+          { q: "When writing a research report, Thomas checks his style manual to determine the best way to do this.", a: "Cite his sources", pi: "CO:090" },
+          { q: "APA, MLA, and Chicago are examples of these.", a: "Style manuals (citation styles)", pi: "CO:090" },
+          { q: "A computer tool that organizes online information for a research report is this.", a: "Mind-mapping programs", pi: "CO:086" },
+          { q: "Before a staff meeting, Mara should provide attendees with this so they can prepare.", a: "A meeting agenda", pi: "CO:063" },
+          { q: "During a meeting, Jon connects his idea to a previous comment from Marilee. This is the discussion technique called this.", a: "Building on someone else's comment", pi: "CO:063" },
+          { q: "Brainstorming, agenda planning, and assigning a note-taker are all part of effective management of this.", a: "Meetings (group discussions)", pi: "CO:063" },
+          { q: "A thesaurus gives synonyms; a dictionary gives definitions; a style manual handles this.", a: "Citation format (citing sources)", pi: "CO:090" }
+        ]}
+      ]
+    },
+    {
+      name: "Numbers & Know-How",
+      subtitle: "Finance + Info + Management",
+      pools: [
+        { points: 200, items: [
+          { q: "When developing a personal budget, salary should be considered a source of this.", a: "Income", pi: "FI:061" },
+          { q: "Utilities, clothing, insurance, and rent are examples of these in a personal budget.", a: "Expenses", pi: "FI:061" },
+          { q: "Income minus expenses determines whether a personal budget runs a surplus or this.", a: "A deficit", pi: "FI:061" },
+          { q: "Salary, wages, tips, commissions, allowances, and gifts are all sources of this.", a: "Income (personal income)", pi: "FI:061" },
+          { q: "Tracking what comes in versus what goes out monthly is the purpose of this financial tool.", a: "A personal budget", pi: "FI:061" },
+          { q: "Of salary, utilities, clothing, and insurance — only one is income. Which is it?", a: "Salary", pi: "FI:061" },
+          { q: "Income is money in; this is money out.", a: "Expenses", pi: "FI:061" }
+        ]},
+        { points: 400, items: [
+          { q: "Managers use financial information primarily to create and adjust these.", a: "Budgets", pi: "FI:354" },
+          { q: "Business accounting information is often summarized in this type of statement, which shows assets, liabilities, and equity.", a: "Balance sheet", pi: "FI:094" },
+          { q: "The financial statement that shows revenue, expenses, and profit over a period of time is this.", a: "Income statement", pi: "FI:094" },
+          { q: "The financial statement that tracks money coming in and going out over time is this.", a: "Cash flow statement", pi: "FI:094" },
+          { q: "Records and reports of financial transactions are produced by this role of finance.", a: "Accounting", pi: "FI:354" },
+          { q: "Raising money to run the business through loans, investors, or stock is this role of finance.", a: "Financing", pi: "FI:354" },
+          { q: "Decisions about how to deploy money to grow it (the administration of assets) belong to this role of finance.", a: "Investments (asset administration)", pi: "FI:354" }
+        ]},
+        { points: 600, items: [
+          { q: "To prevent identity theft, you should do this with important financial documents before throwing them away.", a: "Shred (or tear up) them", pi: "FI:063" },
+          { q: "When shopping for an investment broker, you should always do this before trusting them with money.", a: "Run a background check", pi: "FI:560" },
+          { q: "Nonprofits often pool donated money and invest it long-term in these — only spending the earnings.", a: "Endowment funds", pi: "FI:560" },
+          { q: "Verifying a broker's licenses, complaint history, and credentials before working with them is called this.", a: "Due diligence (running a background check)", pi: "FI:560" },
+          { q: "An advantage to businesses of offering credit is that credit customers tend to be less of this than cash customers.", a: "Price-conscious", pi: "FI:061" },
+          { q: "Stocks, bonds, mutual funds, and CDs are all examples of these.", a: "Investments", pi: "FI:560" },
+          { q: "Donations invested for the long haul, with only the earnings being spent each year, describes this nonprofit financial vehicle.", a: "Endowment fund", pi: "FI:560" }
+        ]},
+        { points: 800, items: [
+          { q: "Facts that are true outside of the mind, with no feelings or biases, are described as this.", a: "Objective", pi: "NF:079" },
+          { q: "Information based on personal opinion or feelings is described as this.", a: "Subjective", pi: "NF:079" },
+          { q: "Holly, Cary, and Rick collaborate on documents and share files via the internet despite being far apart. They are using this type of software.", a: "Groupware", pi: "NF:003" },
+          { q: "Free trial software you can try before buying is called this.", a: "Shareware", pi: "NF:003" },
+          { q: "Software that's free to use but copyrighted is called this.", a: "Freeware", pi: "NF:003" },
+          { q: "Malicious software that secretly tracks user activity is called this.", a: "Spyware", pi: "NF:003" },
+          { q: "Software where multiple programs work together — letting users combine information across applications — is called this.", a: "Integrated software", pi: "NF:003" }
+        ]},
+        { points: 1000, items: [
+          { q: "Bob increases his yacht charter advertising on local radio and TV. This relates to this marketing function.", a: "Promotion", pi: "MK:002" },
+          { q: "The four primary functions of management spell POLC: Planning, Organizing, Leading, and this.", a: "Controlling", pi: "SM:001" },
+          { q: "Planning, organizing, leading, and controlling are the four functions of this.", a: "Management", pi: "SM:001" },
+          { q: "Larry's Dairy wants to team up with Rookie Cookie to develop one new ice cream flavor. They should do this.", a: "Execute a joint venture", pi: "SM:106" },
+          { q: "An ongoing shared business between two parties is a partnership; a one-project teamup between two companies is this.", a: "A joint venture", pi: "SM:106" },
+          { q: "Channel management, marketing-info management, market planning, pricing, product/service mgmt, promotion, and selling are the seven of these.", a: "Marketing functions", pi: "MK:002" },
+          { q: "Following not just the letter of laws but their intent — closing loopholes that violate the spirit of regulation — describes this business law principle.", a: "Comply with the spirit of the law", pi: "BL:163" }
+        ]}
+      ]
+    }
+  ];
+
+  const FINAL_JEOPARDY_POOL = [
+    {
+      category: "The Four Utilities",
+      q: "There are FOUR economic utilities created by business activities. Name all four. (Award the wager if a team correctly names all 4.)",
+      a: "(1) Form, (2) Place, (3) Time, (4) Possession",
+      pi: "EC:004"
+    },
+    {
+      category: "POLC",
+      q: "The four primary functions of management spell out POLC. Name all four functions. (Award the wager if a team correctly names all 4.)",
+      a: "(1) Planning, (2) Organizing, (3) Leading, (4) Controlling",
+      pi: "SM:001"
+    },
+    {
+      category: "Decision-Making",
+      q: "Name as many of the SIX steps of the decision-making process as your team can. (Award the wager if a team correctly names at least 5 in the right general order.)",
+      a: "(1) Determine objectives, (2) Identify options, (3) Gather information, (4) Weigh pros and cons, (5) Make the decision, (6) Evaluate the result",
+      pi: "PD:017"
+    },
+    {
+      category: "Customer Types",
+      q: "Name as many of the FOUR difficult customer types as your team can. (Award the wager if a team names all 4.)",
+      a: "(1) Suspicious, (2) Domineering/Superior, (3) Slow/Methodical, (4) Eager",
+      pi: "CR:008"
+    },
+    {
+      category: "Building a Business",
+      q: "There are THREE primary types of business activities (industries). Name all three. (Award the wager if a team correctly names all 3.)",
+      a: "(1) Industrial / Producer (raw materials, manufacturing), (2) Trade industries (wholesalers and retailers), (3) Service industries",
+      pi: "EC:071"
+    },
+    {
+      category: "Career Self-Assessment",
+      q: "When choosing a career, you should examine THREE things about yourself. Name all three. (Award the wager if a team correctly names all 3.)",
+      a: "(1) Personality, (2) Abilities, (3) Interests",
+      pi: "PD:013"
+    },
+    {
+      category: "Three Roles of Finance",
+      q: "Finance has THREE primary roles in a business. Name all three. (Award the wager if a team correctly names all 3.)",
+      a: "(1) Accounting (records and reports), (2) Financing (raises money), (3) Investments / Asset administration (deploys money to grow it)",
+      pi: "FI:354"
+    },
+    {
+      category: "Marketing Functions",
+      q: "There are SEVEN core marketing functions. Name as many as your team can. (Award the wager if a team correctly names at least 5 of the 7.)",
+      a: "(1) Channel Management, (2) Marketing-Information Management, (3) Market Planning, (4) Pricing, (5) Product/Service Management, (6) Promotion, (7) Selling",
+      pi: "MK:002"
+    }
+  ];
+
+  // ==================== STATE ====================
+  let state = {
+    teams: [],
+    used: new Set(),
+    currentCell: null,
+    finalWagers: {},
+    dailyDoubleCell: null,    // e.g. "2-3" — randomly assigned at game start
+    dailyDoubleTeam: null,    // index of team that selected the DD
+    dailyDoubleWager: 0,
+    currentQuestions: [],     // [catIdx][row] = randomly selected variant for this game
+    currentFinal: null        // randomly selected Final Jeopardy item for this game
+  };
+
+  // Track the previous game's questions (per cell) so consecutive plays
+  // don't repeat the same question. Persists across resetGame() calls within
+  // the same browser session — fully wiped only by a hard page reload.
+  let lastUsedQuestions = null; // [catIdx][row] = the q-text used last game
+  let lastUsedFinal = null;     // q-text of last Final Jeopardy used
+
+  // Pick one random item per cell + one random Final Jeopardy. When possible,
+  // avoids reusing the question that was selected for that cell last game.
+  // Called when a new game starts; refreshed on every reset so each play
+  // surfaces different content.
+  function rollFreshQuestions() {
+    state.currentQuestions = CATEGORIES.map((cat, catIdx) =>
+      cat.pools.map((pool, rowIdx) => {
+        const lastQ = lastUsedQuestions ? lastUsedQuestions[catIdx][rowIdx] : null;
+        // Build a candidate list excluding the last-used question if possible
+        const candidates = pool.items.length > 1 && lastQ
+          ? pool.items.filter(item => item.q !== lastQ)
+          : pool.items;
+        return candidates[Math.floor(Math.random() * candidates.length)];
+      })
+    );
+    const finalCandidates = FINAL_JEOPARDY_POOL.length > 1 && lastUsedFinal
+      ? FINAL_JEOPARDY_POOL.filter(item => item.q !== lastUsedFinal)
+      : FINAL_JEOPARDY_POOL;
+    state.currentFinal = finalCandidates[Math.floor(Math.random() * finalCandidates.length)];
+
+    // Remember this game's selections so the NEXT roll can avoid them
+    lastUsedQuestions = state.currentQuestions.map(row => row.map(item => item.q));
+    lastUsedFinal = state.currentFinal.q;
+  }
+
+  // ==================== ELEMENT REFS ====================
+  const $ = (id) => document.getElementById(id);
+  const setupScreen = $("setup-screen");
+  const gameScreen = $("game-screen");
+  const endScreen = $("end-screen");
+  const teamInputs = $("team-inputs");
+  const board = $("board");
+  const scoreboard = $("scoreboard");
+  const questionModal = $("question-modal");
+  const finalModal = $("final-modal");
+  const finalBanner = $("final-jeopardy-banner");
+
+  // ==================== SETUP ====================
+  $("add-team").addEventListener("click", () => {
+    const count = teamInputs.children.length;
+    if (count >= 6) return;
+    const row = document.createElement("div");
+    row.className = "team-input-row";
+    row.innerHTML = `
+      <label>Team ${count + 1}</label>
+      <input type="text" placeholder="Team name..." value="Team ${count + 1}">
+      <button class="remove-btn">Remove</button>
+    `;
+    row.querySelector(".remove-btn").addEventListener("click", () => {
+      row.remove();
+      // Relabel
+      [...teamInputs.children].forEach((r, i) => {
+        r.querySelector("label").textContent = `Team ${i + 1}`;
+      });
+      // If we dropped back below 6, make sure the add button is visible again
+      $("add-team").style.display = "";
+    });
+    teamInputs.appendChild(row);
+    if (count + 1 >= 6) $("add-team").style.display = "none";
+  });
+
+  $("start-game").addEventListener("click", () => {
+    const inputs = teamInputs.querySelectorAll("input");
+    state.teams = [];
+    inputs.forEach((input, i) => {
+      const name = input.value.trim() || `Team ${i + 1}`;
+      state.teams.push({ name, score: 0 });
+    });
+    if (state.teams.length < 2) {
+      alert("You need at least 2 teams to play.");
+      return;
+    }
+    // Pick a random Daily Double cell — anywhere except the easiest ($200) row,
+    // matching real Jeopardy where DDs cluster in higher-value rows.
+    const ddCat = Math.floor(Math.random() * CATEGORIES.length);
+    const ddRow = 1 + Math.floor(Math.random() * 4); // rows 1–4 ($400–$1000)
+    state.dailyDoubleCell = `${ddCat}-${ddRow}`;
+
+    // Roll a fresh set of question variants and a fresh Final Jeopardy
+    rollFreshQuestions();
+
+    setupScreen.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+    renderBoard();
+    renderScoreboard();
+  });
+
+  $("reset-game").addEventListener("click", () => {
+    if (!confirm("Reset the entire game? All scores and progress will be lost.")) return;
+    resetGame();
+  });
+
+  $("play-again").addEventListener("click", () => {
+    resetGame();
+  });
+
+  function resetGame() {
+    // Reset all game state
+    state = {
+      teams: [],
+      used: new Set(),
+      currentCell: null,
+      finalWagers: {},
+      dailyDoubleCell: null,
+      dailyDoubleTeam: null,
+      dailyDoubleWager: 0,
+      currentQuestions: [],
+      currentFinal: null
+    };
+
+    // Close any open modals
+    questionModal.classList.remove("active");
+    finalModal.classList.remove("active");
+    document.getElementById("daily-double-modal").classList.remove("active");
+
+    // Hide game and end screens; show setup
+    gameScreen.classList.add("hidden");
+    endScreen.classList.add("hidden");
+    setupScreen.classList.remove("hidden");
+    finalBanner.classList.add("hidden");
+
+    // Restore the "+ Add another team" button in case it was hidden after 4 teams
+    $("add-team").style.display = "";
+
+    // Reset team inputs back to two default rows
+    teamInputs.innerHTML = `
+      <div class="team-input-row">
+        <label>Team 1</label>
+        <input type="text" placeholder="Team name..." value="Team 1">
+      </div>
+      <div class="team-input-row">
+        <label>Team 2</label>
+        <input type="text" placeholder="Team name..." value="Team 2">
+      </div>
+    `;
+
+    // Scroll back to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ==================== BOARD RENDER ====================
+  function renderBoard() {
+    board.innerHTML = "";
+    // Category headers (row 1)
+    CATEGORIES.forEach((cat) => {
+      const h = document.createElement("div");
+      h.className = "category-header";
+      h.textContent = cat.name;
+      board.appendChild(h);
+    });
+    // 5 rows of cells
+    for (let row = 0; row < 5; row++) {
+      CATEGORIES.forEach((cat, catIdx) => {
+        const pool = cat.pools[row];
+        const cell = document.createElement("div");
+        const cellId = `${catIdx}-${row}`;
+        cell.className = "cell";
+        cell.dataset.id = cellId;
+        if (state.used.has(cellId)) {
+          cell.classList.add("used");
+        } else {
+          cell.textContent = "$" + pool.points;
+          cell.addEventListener("click", () => openQuestion(catIdx, row));
+        }
+        board.appendChild(cell);
+      });
+    }
+  }
+
+  // ==================== SCOREBOARD RENDER ====================
+  function renderScoreboard() {
+    scoreboard.innerHTML = "";
+    const maxScore = Math.max(...state.teams.map(t => t.score));
+    state.teams.forEach((team) => {
+      const div = document.createElement("div");
+      div.className = "team-score";
+      if (team.score === maxScore && maxScore > 0) div.classList.add("leading");
+      div.innerHTML = `
+        <div class="team-name">${escapeHTML(team.name)}</div>
+        <div class="score ${team.score < 0 ? "negative" : ""}">$${team.score}</div>
+      `;
+      scoreboard.appendChild(div);
+    });
+  }
+
+  function escapeHTML(s) {
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // ==================== QUESTION MODAL ====================
+  function openQuestion(catIdx, row) {
+    const cellId = `${catIdx}-${row}`;
+
+    // If this is the Daily Double cell, branch to DD flow instead
+    if (cellId === state.dailyDoubleCell) {
+      openDailyDouble(catIdx, row);
+      return;
+    }
+
+    const cat = CATEGORIES[catIdx];
+    const points = cat.pools[row].points;
+    const q = state.currentQuestions[catIdx][row];
+    state.currentCell = { catIdx, row, points };
+
+    $("modal-points").textContent = "$" + points;
+    $("modal-category").textContent = cat.name + " • " + cat.subtitle;
+    $("modal-question").textContent = q.q;
+    $("modal-answer").textContent = q.a;
+    $("modal-pi").textContent = "Performance Indicator: " + q.pi;
+
+    $("answer-section").classList.add("hidden");
+    $("scoring-section").classList.add("hidden");
+    $("reveal-btn").classList.remove("hidden");
+
+    questionModal.classList.add("active");
+  }
+
+  $("reveal-btn").addEventListener("click", () => {
+    $("answer-section").classList.remove("hidden");
+    $("reveal-btn").classList.add("hidden");
+    renderScoringRows();
+    $("scoring-section").classList.remove("hidden");
+  });
+
+  // Pending marks: { teamIdx: 'right' | 'wrong' } — undefined = unmarked = no change
+  let pendingMarks = {};
+
+  function renderScoringRows() {
+    pendingMarks = {};
+    const container = $("team-rows");
+    container.innerHTML = "";
+    const points = state.currentCell.points;
+    state.teams.forEach((team, i) => {
+      const row = document.createElement("div");
+      row.className = "team-row";
+      row.innerHTML = `
+        <span class="team-label">${escapeHTML(team.name)}</span>
+        <div class="row-buttons">
+          <button class="right-btn" data-team="${i}" data-mark="right">✓ +$${points}</button>
+          <button class="wrong-btn" data-team="${i}" data-mark="wrong">✗ −$${points}</button>
+        </div>
+      `;
+      row.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const teamIdx = parseInt(btn.dataset.team);
+          const mark = btn.dataset.mark;
+          if (pendingMarks[teamIdx] === mark) {
+            // Click again to unmark
+            delete pendingMarks[teamIdx];
+            btn.classList.remove("selected");
+          } else {
+            // Set this mark, clear any sibling selection in the same row
+            pendingMarks[teamIdx] = mark;
+            btn.parentElement.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+          }
+        });
+      });
+      container.appendChild(row);
+    });
+  }
+
+  $("apply-scores-btn").addEventListener("click", () => {
+    const points = state.currentCell.points;
+    Object.entries(pendingMarks).forEach(([teamIdx, mark]) => {
+      const idx = parseInt(teamIdx);
+      if (mark === "right") state.teams[idx].score += points;
+      else if (mark === "wrong") state.teams[idx].score -= points;
+    });
+    pendingMarks = {};
+    closeQuestion();
+  });
+
+  function closeQuestion() {
+    const { catIdx, row } = state.currentCell;
+    state.used.add(`${catIdx}-${row}`);
+    questionModal.classList.remove("active");
+    renderBoard();
+    renderScoreboard();
+    if (state.used.size === 30) {
+      finalBanner.classList.remove("hidden");
+      finalBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  // Click outside modal closes it (cancel)
+  questionModal.addEventListener("click", (e) => {
+    if (e.target === questionModal) {
+      // Only allow close if scoring section isn't shown (to avoid skipping mid-scoring)
+      if ($("scoring-section").classList.contains("hidden")) {
+        questionModal.classList.remove("active");
+        state.currentCell = null;
+      }
+    }
+  });
+
+  // ==================== DAILY DOUBLE ====================
+  const dailyDoubleModal = $("daily-double-modal");
+
+  function openDailyDouble(catIdx, row) {
+    const cat = CATEGORIES[catIdx];
+    const points = cat.pools[row].points;
+    state.currentCell = { catIdx, row, points };
+    state.dailyDoubleTeam = null;
+    state.dailyDoubleWager = 0;
+
+    // Reset stages — show only the reveal banner first
+    $("dd-stage-reveal").classList.remove("hidden");
+    $("dd-stage-team").classList.add("hidden");
+    $("dd-stage-wager").classList.add("hidden");
+    $("dd-stage-question").classList.add("hidden");
+
+    $("dd-category-tag").textContent = cat.name + " • " + cat.subtitle;
+
+    // Restart the bounce animation by re-applying the class
+    const title = document.querySelector(".dd-title");
+    title.style.animation = "none";
+    void title.offsetWidth; // force reflow
+    title.style.animation = "";
+
+    dailyDoubleModal.classList.add("active");
+  }
+
+  $("dd-continue").addEventListener("click", () => {
+    $("dd-stage-reveal").classList.add("hidden");
+    $("dd-stage-team").classList.remove("hidden");
+    renderDDTeamButtons();
+  });
+
+  function renderDDTeamButtons() {
+    const list = $("dd-team-list");
+    list.innerHTML = "";
+    state.teams.forEach((team, i) => {
+      const btn = document.createElement("button");
+      btn.innerHTML = `
+        <span>${escapeHTML(team.name)}</span>
+        <span class="score-pill">$${team.score}</span>
+      `;
+      btn.addEventListener("click", () => selectDDTeam(i));
+      list.appendChild(btn);
+    });
+  }
+
+  function selectDDTeam(teamIdx) {
+    state.dailyDoubleTeam = teamIdx;
+    const team = state.teams[teamIdx];
+
+    // Real Jeopardy "true Daily Double" rule:
+    // a team can wager up to their current score OR up to the highest cell value
+    // ($1000 here), whichever is greater. This protects teams that are behind.
+    const min = 0;
+    const max = Math.max(1000, team.score);
+
+    $("dd-selected-team").textContent = team.name;
+    $("dd-selected-score").textContent = team.score;
+    $("dd-min").textContent = min;
+    $("dd-max").textContent = max;
+
+    const input = $("dd-wager-input");
+    input.min = min;
+    input.max = max;
+    // Default wager = the cell's printed value (a sensible starting point)
+    input.value = state.currentCell.points;
+    setTimeout(() => { input.focus(); input.select(); }, 50);
+
+    $("dd-stage-team").classList.add("hidden");
+    $("dd-stage-wager").classList.remove("hidden");
+  }
+
+  $("dd-lock-wager").addEventListener("click", lockWager);
+  $("dd-wager-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") lockWager();
+  });
+
+  function lockWager() {
+    const input = $("dd-wager-input");
+    const wager = parseInt(input.value);
+    const team = state.teams[state.dailyDoubleTeam];
+    const min = 0;
+    const max = Math.max(1000, team.score);
+
+    if (isNaN(wager) || wager < min || wager > max) {
+      alert(`Wager must be between $${min} and $${max}.`);
+      input.focus();
+      return;
+    }
+    state.dailyDoubleWager = wager;
+
+    // Populate question stage
+    const cat = CATEGORIES[state.currentCell.catIdx];
+    const q = state.currentQuestions[state.currentCell.catIdx][state.currentCell.row];
+
+    $("dd-wager-display").textContent = wager;
+    $("dd-q-category").textContent = cat.name + " • " + cat.subtitle;
+    $("dd-question").textContent = q.q;
+    $("dd-answer").textContent = q.a;
+    $("dd-pi").textContent = "Performance Indicator: " + q.pi;
+    $("dd-correct-amt").textContent = wager;
+    $("dd-wrong-amt").textContent = wager;
+    $("dd-result-prompt").textContent = `Result for ${team.name}:`;
+
+    // Reset visibility for stage 4
+    $("dd-answer-section").classList.add("hidden");
+    $("dd-reveal-btn").classList.remove("hidden");
+    $("dd-result-section").classList.add("hidden");
+
+    $("dd-stage-wager").classList.add("hidden");
+    $("dd-stage-question").classList.remove("hidden");
+  }
+
+  $("dd-reveal-btn").addEventListener("click", () => {
+    $("dd-answer-section").classList.remove("hidden");
+    $("dd-reveal-btn").classList.add("hidden");
+    $("dd-result-section").classList.remove("hidden");
+  });
+
+  $("dd-correct").addEventListener("click", () => {
+    state.teams[state.dailyDoubleTeam].score += state.dailyDoubleWager;
+    closeDailyDouble();
+  });
+
+  $("dd-wrong").addEventListener("click", () => {
+    state.teams[state.dailyDoubleTeam].score -= state.dailyDoubleWager;
+    closeDailyDouble();
+  });
+
+  function closeDailyDouble() {
+    const { catIdx, row } = state.currentCell;
+    state.used.add(`${catIdx}-${row}`);
+    dailyDoubleModal.classList.remove("active");
+    renderBoard();
+    renderScoreboard();
+    if (state.used.size === 30) {
+      finalBanner.classList.remove("hidden");
+      finalBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  // ==================== FINAL JEOPARDY ====================
+  $("start-final").addEventListener("click", () => {
+    $("final-stage-1").classList.remove("hidden");
+    $("final-stage-2").classList.add("hidden");
+    $("final-category-name").textContent = state.currentFinal.category;
+    renderWagers();
+    finalModal.classList.add("active");
+  });
+
+  function renderWagers() {
+    const container = $("final-wagers");
+    container.innerHTML = "";
+    state.teams.forEach((team, i) => {
+      const max = Math.max(0, team.score);
+      const row = document.createElement("div");
+      row.className = "wager-input-row";
+      row.innerHTML = `
+        <span class="name">${escapeHTML(team.name)}</span>
+        <span class="current-score">$${team.score}</span>
+        <input type="number" min="0" max="${max}" value="0" data-team="${i}">
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  $("lock-wagers").addEventListener("click", () => {
+    const inputs = $("final-wagers").querySelectorAll("input");
+    state.finalWagers = {};
+    let valid = true;
+    inputs.forEach((input) => {
+      const teamIdx = parseInt(input.dataset.team);
+      const team = state.teams[teamIdx];
+      const wager = parseInt(input.value) || 0;
+      const max = Math.max(0, team.score);
+      if (wager < 0 || wager > max) {
+        valid = false;
+      }
+      state.finalWagers[teamIdx] = wager;
+    });
+
+    if (!valid) {
+      alert("One or more wagers is invalid. Wagers must be ≥ 0 and ≤ that team's current score.");
+      return;
+    }
+
+    $("final-stage-1").classList.add("hidden");
+    $("final-stage-2").classList.remove("hidden");
+    $("final-cat-tag").textContent = state.currentFinal.category;
+    $("final-question").textContent = state.currentFinal.q;
+    $("final-answer").textContent = state.currentFinal.a;
+    $("final-pi").textContent = "Performance Indicator: " + state.currentFinal.pi;
+    $("final-answer-section").classList.add("hidden");
+    $("final-scoring").classList.add("hidden");
+    $("final-reveal-btn").classList.remove("hidden");
+  });
+
+  $("final-reveal-btn").addEventListener("click", () => {
+    $("final-answer-section").classList.remove("hidden");
+    $("final-reveal-btn").classList.add("hidden");
+    renderFinalResults();
+    $("final-scoring").classList.remove("hidden");
+  });
+
+  function renderFinalResults() {
+    const container = $("final-team-results");
+    container.innerHTML = "";
+    state.teams.forEach((team, i) => {
+      const wager = state.finalWagers[i] || 0;
+      const row = document.createElement("div");
+      row.className = "wager-input-row";
+      row.innerHTML = `
+        <span class="name">${escapeHTML(team.name)}</span>
+        <span style="color:rgba(255,255,255,0.6); font-size:0.9rem;">Wagered $${wager}</span>
+        <button class="team-btn correct" data-team="${i}" data-result="correct" style="margin-left:0.5rem;">✓ Correct</button>
+        <button class="team-btn wrong" data-team="${i}" data-result="wrong">✗ Wrong</button>
+      `;
+      container.appendChild(row);
+    });
+
+    container.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const teamIdx = parseInt(btn.dataset.team);
+        const result = btn.dataset.result;
+        const wager = state.finalWagers[teamIdx];
+        // Toggle: clear sibling, mark self
+        const row = btn.parentElement;
+        row.querySelectorAll("button").forEach(b => b.style.opacity = "0.4");
+        btn.style.opacity = "1";
+        // Store result on row for finalize
+        row.dataset.result = result;
+      });
+    });
+  }
+
+  $("finalize-btn").addEventListener("click", () => {
+    const rows = $("final-team-results").querySelectorAll(".wager-input-row");
+    rows.forEach((row, i) => {
+      const result = row.dataset.result;
+      const wager = state.finalWagers[i] || 0;
+      if (result === "correct") {
+        state.teams[i].score += wager;
+      } else if (result === "wrong") {
+        state.teams[i].score -= wager;
+      }
+      // If no result selected, no change
+    });
+    finalModal.classList.remove("active");
+    showEndScreen();
+  });
+
+  // ==================== END SCREEN ====================
+  function showEndScreen() {
+    gameScreen.classList.add("hidden");
+    endScreen.classList.remove("hidden");
+
+    const sorted = [...state.teams].sort((a, b) => b.score - a.score);
+    const winner = sorted[0];
+
+    $("winner-name").textContent = winner.name;
+    $("winner-score").textContent = `$${winner.score}`;
+
+    const list = $("standings-list");
+    list.innerHTML = "";
+    sorted.forEach((team, i) => {
+      const row = document.createElement("div");
+      row.className = "standing-row";
+      row.innerHTML = `
+        <span class="rank">${i + 1}.</span>
+        <span class="team">${escapeHTML(team.name)}</span>
+        <span class="pts">$${team.score}</span>
+      `;
+      list.appendChild(row);
+    });
+
+    endScreen.scrollIntoView({ behavior: "smooth" });
+  }
+</script>
+
+</body>
+</html>
